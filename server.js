@@ -10,22 +10,36 @@ const schema = buildSchema(`
     type Weather {
         temperature: Float!
         description: String!
+        feels_like: Float!
+        temp_min: Float!
+        temp_max: Float!
+        pressure: Int!
+        humidity: Int!
+    }
+    enum Units {
+        standard
+        metric
+        imperial
     }
     type Query {
-        getWeather(zip: Int!): Weather!
+        getWeather(zip: Int!, units: Units): Weather!
     }
 `)
 
 // resolvers
 const root = {
-    getWeather: async ({ zip }) => {
+    getWeather: async ({ zip, units = 'imperial' }) => {
         const apikey = process.env.OPENWEATHERMAP_API_KEY
-        const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}`
+        const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}&units=${units}`
         const res = await fetch(url)
         const json = await res.json()
         const temperature = json.main.temp
+        const temp_min = json.main.temp_min
+        const temp_max = json.main.temp_max
+        const pressure = json.main.pressure
+        const humidity = json.main.humidity
         const description = json.weather[0].description
-        return { temperature, description }
+        return { temperature, description, temp_min, temp_max, pressure, humidity }
     }
 }
 
