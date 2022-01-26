@@ -2,11 +2,19 @@
 const express = require('express')
 const { graphqlHTTP } = require('express-graphql')
 const { buildSchema } = require('graphql')
+require('dotenv').config()
+const fetch = require('node-fetch')
+
+const apikey = process.env.OPENWEATHERMAP_API_KEY
 
 // schema
 const schema = buildSchema(`
-    type Test {
-        message: String!
+    type Weather {
+        temperature: Float!
+        description: String!
+    }
+    type Query {
+        getWeather(zip: Int!): Weather!
     }
 `)
 
