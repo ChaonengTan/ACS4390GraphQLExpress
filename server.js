@@ -4,6 +4,7 @@ const { graphqlHTTP } = require('express-graphql')
 const { buildSchema } = require('graphql')
 require('dotenv').config()
 const fetch = require('node-fetch')
+const { GraphQLJSON, GraphQLJSONObject } = require('graphql-type-json');
 
 // schema
 const schema = buildSchema(`
@@ -26,21 +27,16 @@ const schema = buildSchema(`
         metric
         imperial
     }
-    type OneCallParam {
-        temperature: Float
-        feels_like: Float
-        pressure: Int
-        humidity: Int
-    }
     type OneCall {
         timezone: String
-        current: OneCallParam
-        hourly: OneCallParam
-        daily: OneCallParam
+        current: JSON
+        hourly: JSON
+        daily: JSON
     }
+    scalar JSON
     type Query {
         getWeather(zip: Int!, units: Units): Weather!
-        oneCall(lat: Float!, lon: Float!): [OneCall]
+        oneCall(lat: Float!, lon: Float!): OneCall!
     }
 `)
 
@@ -87,7 +83,8 @@ const root = {
         const url = `https://api.openweathermap.org/data/2.5/onecall?lon=${lon}&lat=${lat}&appid=${apikey}`
         const res = await fetch(url)
         const json = await res.json()
-        
+        // console.log(json)
+
         const current = json.current
         const minutely = json.minutely
         const hourly = json.hourly
