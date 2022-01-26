@@ -5,8 +5,6 @@ const { buildSchema } = require('graphql')
 require('dotenv').config()
 const fetch = require('node-fetch')
 
-const apikey = process.env.OPENWEATHERMAP_API_KEY
-
 // schema
 const schema = buildSchema(`
     type Weather {
@@ -20,7 +18,15 @@ const schema = buildSchema(`
 
 // resolvers
 const root = {
-    // 
+    getWeather: async ({ zip }) => {
+        const apikey = process.env.OPENWEATHERMAP_API_KEY
+        const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}`
+        const res = await fetch(url)
+        const json = await res.json()
+        const temperature = json.main.temp
+        const description = json.weather[0].description
+        return { temperature, description }
+    }
 }
 
 // app
