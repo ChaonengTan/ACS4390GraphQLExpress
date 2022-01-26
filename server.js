@@ -34,9 +34,16 @@ const schema = buildSchema(`
         daily: JSON
     }
     scalar JSON
+    type WorldState {
+        earth: JSON
+        cetus: JSON
+        cambion: JSON
+        vallis: JSON
+    }
     type Query {
         getWeather(zip: Int!, units: Units): Weather!
         oneCall(lat: Float!, lon: Float!): OneCall!
+        getWF: WorldState!
     }
 `)
 
@@ -48,7 +55,7 @@ const root = {
         const res = await fetch(url)
         const json = await res.json()
         const cod = json.cod
-        console.log(json)
+        // console.log(json)
         if (cod == 200) {
             const message = 'success'
 
@@ -77,7 +84,6 @@ const root = {
             return { temperature, description, temp_min, temp_max, pressure, humidity, cod, lon, lat, name, message }
         }
     },
-    // WIP: returning JSON dosent work
     oneCall: async ({ lon, lat }) => {
         const apikey = process.env.OPENWEATHERMAP_API_KEY
         const url = `https://api.openweathermap.org/data/2.5/onecall?lon=${lon}&lat=${lat}&appid=${apikey}`
@@ -90,6 +96,14 @@ const root = {
         const hourly = json.hourly
         const daily = json.daily
         return { current, minutely, hourly, daily }
+    },
+    getWF: async () => {
+        const url = place => `https://api.warframestat.us/pc/${place}`
+        const earthUrl = url('earthCycle'), cetusUrl = url('vallisCycle'), cambionUrl = url('cambionCycle'), vallisUrl = url('vallisCycle')
+        const earthRes = await fetch(earthUrl), cetusRes = await fetch(cetusUrl), cambionRes = await fetch(cambionUrl), vallisRes = await fetch(vallisUrl)
+        const earth = await earthRes.json(), cetus = await cetusRes.json(), cambion = await cambionRes.json(), vallis = await vallisRes.json()
+        // console.log(json)
+        return { earth, cetus, cambion, vallis }
     }
 }
 
