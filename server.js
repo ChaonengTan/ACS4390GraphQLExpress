@@ -15,6 +15,7 @@ const schema = buildSchema(`
         temp_max: Float!
         pressure: Int!
         humidity: Int!
+        cod: Int!
     }
     enum Units {
         standard
@@ -34,12 +35,13 @@ const root = {
         const res = await fetch(url)
         const json = await res.json()
         const temperature = json.main.temp
+        const description = json.weather[0].description
         const temp_min = json.main.temp_min
         const temp_max = json.main.temp_max
         const pressure = json.main.pressure
         const humidity = json.main.humidity
-        const description = json.weather[0].description
-        return { temperature, description, temp_min, temp_max, pressure, humidity }
+        const cod = json.cod
+        return { temperature, description, temp_min, temp_max, pressure, humidity, cod }
     }
 }
 
