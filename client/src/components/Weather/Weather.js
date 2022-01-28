@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { gql } from '@apollo/client'
-import { client } from '../index'
+import { client } from '../../index'
 import DisplayWeather from './WeatherDisplay'
 import './Weather.css'
 
@@ -73,7 +73,7 @@ function Weather() {
                     <input id='standardRadio' type='radio' name='units' value='standard'></input>
                     <label for='metricRadio'>Celcius:</label>
                     <input id='metricRadio' type='radio' name='units' value='metric'></input>
-                    <label id='imperialRadio'>Fahrenheit:</label>
+                    <label for='imperialRadio'>Fahrenheit:</label>
                     <input id='imperialRadio' type='radio' name='units' value='imperial'></input>
                 </div>
                 <button type="submit">Submit</button>
