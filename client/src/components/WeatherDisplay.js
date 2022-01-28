@@ -1,11 +1,12 @@
 export default function DisplayWeather(props) {
     const { name, temperature, description, pressure, humidity, cod, message } = props.data
+    const unit = props.units == 'standard' ? 'K' : props.units == 'metric' ? 'C' : 'F'
     const sucessRes = () => {
         return (
             <div className='sucessRes'>
                 <h1>{name}</h1>
                 <div className='weatherStatistics'>
-                    <h2>{temperature}F</h2>
+                    <h2>{temperature}{unit}</h2>
                     <p>{description}</p>
                     <h3>Pressure: {pressure}</h3>
                     <h3>Humidity: {humidity}</h3>
@@ -23,7 +24,7 @@ export default function DisplayWeather(props) {
     }
     return (
         <div className='weatherDisplay'>
-            { cod!=200 ? errRes() : sucessRes() }
+            { cod!==200 ? errRes() : sucessRes() }
         </div>
     )
 }
