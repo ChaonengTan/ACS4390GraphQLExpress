@@ -18,6 +18,8 @@ function Weather() {
                             description
                             pressure
                             humidity
+                            cod
+                            message
                         }
                     }`
             })
