@@ -12,8 +12,6 @@ function Weather() {
     const [ latitude, setLatitude ] = useState(null)
     const [ longitude, setLongitude ] = useState(null)
     navigator.geolocation.getCurrentPosition(position => {
-        // console.log("Latitude is :", position.coords.latitude);
-        // console.log("Longitude is :", position.coords.longitude);
         setLatitude(position.coords.latitude)
         setLongitude(position.coords.longitude)
     });
@@ -22,7 +20,7 @@ function Weather() {
             const json = await client.query({
                 query: gql`
                     query {
-                        getWeather(lat:${latitude}, lon:${longitude}, units:${units}) {
+                        getWeather(lon:${longitude}, lat:${latitude}, units:${units}) {
                             name
                             temperature
                             description
@@ -65,7 +63,7 @@ function Weather() {
             {weather ? <DisplayWeather data={weather.data.getWeather} units={units}/> : null}
             <form onSubmit={(e) => {
                 e.preventDefault()
-                getWeather()
+                zip ? getWeather() : getWeatherGeo()
             }}>
                 <label for='zipInput'>ZIP: </label>
                 <input id='zipInput' value={zip} onChange={(e) => setZip(e.target.value)}/>
