@@ -5,6 +5,7 @@ const { buildSchema } = require('graphql')
 require('dotenv').config()
 const fetch = require('node-fetch')
 const { GraphQLJSON, GraphQLJSONObject } = require('graphql-type-json');
+const cors = require('cors')
 
 // schema
 const schema = buildSchema(`
@@ -116,6 +117,7 @@ app.use('/graphql', graphqlHTTP({
     rootValue: root,
     graphiql: true
 }))
+app.use(cors())
 
 // start
 const port = 4000
