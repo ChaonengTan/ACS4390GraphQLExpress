@@ -42,7 +42,7 @@ const schema = buildSchema(`
         vallis: JSON
     }
     type Query {
-        getWeather(zip: Int!, units: Units): Weather!
+        getWeather(zip: Int, units: Units, lon: Float, lat: Float): Weather!
         oneCall(lat: Float!, lon: Float!): OneCall!
         getWF: WorldState!
     }
@@ -50,9 +50,10 @@ const schema = buildSchema(`
 
 // resolvers
 const root = {
-    getWeather: async ({ zip, units = 'imperial' }) => {
+    getWeather: async ({ zip=null, units = 'imperial', lon=null, lat=null }) => {
         const apikey = process.env.OPENWEATHERMAP_API_KEY
-        const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}&units=${units}`
+        let url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}&units=${units}`
+        lon && lat ? url = `https://api.openweathermap.org/data/2.5/weather?lon=${lon}&lat=${lat}&appid=${apikey}&units=${units}` : null
         const res = await fetch(url)
         const json = await res.json()
         const cod = json.cod
