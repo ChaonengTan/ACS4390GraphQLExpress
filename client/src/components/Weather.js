@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { client } from '../index'
+import DisplayWeather from './WeatherDisplay'
 
 function Weather() {
     const [ zip, setZip ] = useState('')
@@ -8,25 +9,27 @@ function Weather() {
 
     async function getWeather() {
         try {
-          const json = await client.query({
-          query: gql`
-            query {
-              getWeather(zip:${zip}) {
-              temperature
-              description
-            }
-          }
-          `
-          })
-          setWeather(json)
+            const json = await client.query({
+                query: gql`
+                    query {
+                        getWeather(zip:${zip}) {
+                            name
+                            temperature
+                            description
+                            pressure
+                            humidity
+                        }
+                    }`
+            })
+            setWeather(json)
         } catch(err) {
-          console.log(err.message)
+            console.log(err.message)
         }
-      }
+    }
 
     return (
         <div className="Weather">
-            {weather ? <h1>{weather.data.getWeather.temperature}</h1>: null}
+            {weather ? <DisplayWeather data={weather.data.getWeather}/> : null}
             <form onSubmit={(e) => {
                 e.preventDefault()
                 getWeather()
