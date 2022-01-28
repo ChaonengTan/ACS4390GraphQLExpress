@@ -68,7 +68,7 @@ const root = {
             const humidity = json.main.humidity
             const lon = json.coord.lon
             const lat = json.coord.lat
-            const  name = json.name
+            const name = json.name
             return { temperature, description, temp_min, temp_max, pressure, humidity, cod, lon, lat, name, message }
         } else {
             const message = json.message
