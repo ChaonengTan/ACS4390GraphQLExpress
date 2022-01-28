@@ -111,13 +111,13 @@ const root = {
 // app
 const app = express()
 
+app.use(cors())
 // route
 app.use('/graphql', graphqlHTTP({
     schema,
     rootValue: root,
     graphiql: true
 }))
-app.use(cors())
 
 // start
 const port = 4000
